@@ -33,7 +33,7 @@
         {% if page > 1 %}
         <li class="page-item">
             <a class="page-link"
-            href="/buscar?page={{ page - 1 }}&operacao={{ operacao }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+            href="{{ url_for('pedidos.buscar', page=p, data_ini=data_ini, data_fim=data_fim, operacao=operacao) }}">
             Anterior
         </a>
     </li>
@@ -48,7 +48,7 @@
         {% if p <= total_pages %}
         <li class="page-item {% if p == page %}active{% endif %}">
             <a class="page-link"
-            href="/buscar?page={{ p }}&operacao={{ operacao }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+            href="{{ url_for('pedidos.buscar', page=p, data_ini=data_ini, data_fim=data_fim, operacao=operacao) }}">
             {{ p }}
             </a>
         </li>
@@ -66,7 +66,7 @@
 {% if 4 <= p <= total_pages - 3 %}
 <li class="page-item {% if p == page %}active{% endif %}">
     <a class="page-link"
-    href="/buscar?page={{ p }}&operacao={{ operacao }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+    href="{{ url_for('pedidos.buscar', page=p, data_ini=data_ini, data_fim=data_fim, operacao=operacao) }}">
     {{ p }}
 </a>
 </li>
@@ -83,7 +83,7 @@
 {% if p > 0 %}
 <li class="page-item {% if p == page %}active{% endif %}">
     <a class="page-link"
-    href="/buscar?page={{ p }}&operacao={{ operacao }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+    href="{{ url_for('pedidos.buscar', page=p, data_ini=data_ini, data_fim=data_fim, operacao=operacao) }}">
     {{ p }}
 </a>
 </li>
@@ -94,7 +94,7 @@
 {% if page < total_pages %}
 <li class="page-item">
       <a class="page-link"
-      href="/buscar?page={{ page + 1 }}&operacao={{ operacao }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+      href="{{ url_for('pedidos.buscar', page=p, data_ini=data_ini, data_fim=data_fim, operacao=operacao) }}">
       Próxima
       </a>
     </li>
