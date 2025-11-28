@@ -1,0 +1,226 @@
+/* ======== RESET BÁSICO ======== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+/* ======== LAYOUT DO BODY ======== */
+body {
+    padding: 30px;
+    background-color: #f7f7f7;
+}
+
+/* ======== CABEÇALHO ======== */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 20px;
+    border-bottom: 2px solid #ddd;
+}
+
+.header-container h2 {
+    font-size: 28px;
+    font-weight: bold;
+    color: #222;
+}
+
+/* ======== LOGO ======== */
+.logo-fribal {
+    width: 160px;
+    height: auto;
+}
+
+/* ======== FORMULÁRIO ======== */
+form {
+    max-width: 650px;
+    margin-top: 30px;
+}
+
+label.form-label {
+    display: block;
+    font-size: 16px;
+    font-weight: bold;
+    margin-bottom: 6px;
+    color: #333;
+}
+
+/* Campos */
+input[type="date"],
+select.form-select,
+input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    border-radius: 6px;
+    border: 1px solid #ccc;
+    background-color: white;
+    font-size: 15px;
+    transition: 0.2s;
+    margin-bottom: 12px;
+}
+
+input:focus,
+select:focus {
+    border-color: #007bff;
+    outline: none;
+}
+
+/* ======== BOTÃO ======== */
+button {
+    padding: 12px 25px;
+    background-color: #007bff;
+    margin-bottom: 12px ;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.2s;
+}
+
+button:hover {
+    background-color: #0056b3;
+}
+
+.btn-voltar {
+    background: #444;
+    color: white;
+    padding: 8px 16px;
+    border-radius: 6px;
+    text-decoration: none;  /* remove o sublinhado */
+    display: inline-block;
+}
+.btn-voltar:hover {
+    opacity: 0.8;
+}
+
+
+/* RESET BÁSICO */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+    padding: 30px;
+    background-color: #f5f5f5;
+}
+
+/* ===== HEADER ===== */
+.header-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-bottom: 18px;
+    border-bottom: 2px solid #ddd;
+}
+
+.header-container h2 {
+    font-size: 26px;
+    color: #222;
+}
+
+.logo-fribal {
+    width: 160px;
+    height: auto;
+}
+
+/* ===== BOTÃO EXPORTAR ===== */
+button {
+    padding: 12px 22px;
+    background-color: #198754;
+    text-decoration: none;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.2s;
+    margin-top: 15px;
+}
+
+button:hover {
+    background-color: #0f5f3c;
+}
+
+/* ===== PAGINAÇÃO ===== */
+.pagination {
+    list-style: none;
+    display: flex;
+    gap: 6px;
+    margin: 25px 0;
+    padding-left: 0;
+}
+
+.page-item a,
+.page-item span {
+    display: block;
+    padding: 8px 14px;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    color: #007bff;
+    text-decoration: none;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.page-item a:hover {
+    background: #e9ecef;
+}
+
+.page-item.active a {
+    background: #007bff;
+    color: white;
+    border-color: #007bff;
+}
+
+.page-item.disabled span {
+    background: #e5e5e5;
+    color: #777;
+}
+
+/* ===== TABELA ===== */
+.table-responsive {
+    overflow-x: auto;
+    margin-top: 20px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+thead {
+    background: #343a40;
+    color: white;
+}
+
+th, td {
+    padding: 10px;
+    border: 1px solid #ccc;
+    font-size: 14px;
+}
+
+/* Linhas alternadas */
+tbody tr:nth-child(odd) {
+    background-color: #f8f9fa;
+}
+
+tbody tr:hover {
+    background-color: #e9ecef;
+}
+
+/* Mensagem de alerta */
+.text-danger {
+    color: #b00000;
+    margin-top: 15px;
+    font-size: 18px;
+    font-weight: bold;
+}

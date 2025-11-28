@@ -1,0 +1,6 @@
+Flask
+pandas
+fdb
+python-dotenv
+
+

@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Opções</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+
+<body class="p-4">
+
+<div class="header-container">
+    <img src="{{ url_for('static', filename='logofribal.png') }}" 
+         class="logo-fribal" alt="Logo Fribal">
+</div>
+</head>
+<body>
+    <h1>Escolha uma opção</h1>
+
+    <a class="btn" href="/selecionar/cortes">Cortes</a>
+    <a class="btn" href="/selecionar/resultado">Pedidos</a>
+</body>
+</html>

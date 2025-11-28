@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <title>Relatório</title>
+
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='cortes.css') }}">
+</head>
+
+<body>
+
+<div class="header-container">
+    <h2>Gerar Relatório</h2>
+
+    <img src="{{ url_for('static', filename='logofribal.png') }}" 
+         class="logo-fribal" alt="Logo Fribal">
+</div>
+
+<form method="POST" action="{{ url_for('cortes.buscar') }}">
+    <!-- Data Inicial -->
+    <label class="form-label">Data Inicial:</label>
+    <input type="date" name="data_ini" class="form-control" required>
+
+    <!-- Data Final -->
+    <label class="form-label">Data Final:</label>
+    <input type="date" name="data_fim" class="form-control" required>
+
+    <button class="btn btn-primary" type="submit">Buscar</button>
+    <a href="{{ url_for('login') }}" class="btn btn-voltar">← Home</a>
+</form>
+
+</body>
+</html>

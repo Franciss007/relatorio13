@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Relatório</title>
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='relatorio13.css') }}">
+    <meta charset="UTF-8">
+</head>
+<body>
+<div class="header-container">
+    <h2>Relatório de Pedidos</h2>
+    <img src="{{ url_for('static', filename='logofribal.png') }}" 
+    class="logo-fribal" alt="Logo Fribal">
+</div>
+
+
+<form method="POST" action="{{ url_for('pedidos.buscar') }}">
+    <label class="form-label">Operação:</label>
+    <select name="operacao" class="form-select" required>
+        <option value="">Selecione...</option>
+        {% for op in operacoes %}
+            <option value="{{ op[0] }}">{{ op[0] }} - {{ op[1] }}</option>
+        {% endfor %}
+    </select>
+
+    <label class="form-label">Data Inicial:</label>
+    <input type="date" name="data_ini" class="form-control" required>
+
+    <label class="form-label">Data Final:</label>
+    <input type="date" name="data_fim" class="form-control" required>
+
+    <button class="btn btn-primary">Buscar</button>
+    <a href="{{ url_for('login') }}" class="btn btn-voltar">← Home</a>
+</form>
+
+</body>
+</html>

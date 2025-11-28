@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+
+<body class="p-4">
+
+<div class="header-container">
+    <h2>Resultados - 20 Linhas por Página</h2>
+    <img src="{{ url_for('static', filename='logofribal.png') }}" 
+         class="logo-fribal" alt="Logo Fribal">
+</div>
+
+
+{% if dados_paginados and dados_paginados|length > 0 %}
+<form action="{{ url_for('cortes.exportar') }}" method="POST">
+    <input type="hidden" name="data_ini" value="{{ data_ini }}">
+    <input type="hidden" name="data_fim" value="{{ data_fim }}">
+    <button class="btn btn-success mt-3" type="submit">Exportar CSV (todos)</button>
+</form>
+
+<a href="{{ url_for('cortes.index') }}" class="btn btn-voltar"> ← Home</a>
+
+<nav>
+    <ul class="pagination">
+
+        {# BOTÃO ANTERIOR #}
+        {% if page > 1 %}
+        <li class="page-item">
+            <a class="page-link"
+               href="/buscar?page={{ page - 1 }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+               Anterior
+            </a>
+        </li>
+        {% endif %}
+
+        {% set total_pages = (total // per_page) + (1 if total % per_page else 0) %}
+
+        {# PRIMEIRAS 3 PÁGINAS #}
+        {% for p in range(1, 4) %}
+            {% if p <= total_pages %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link"
+                   href="/buscar?page={{ p }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+                   {{ p }}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {# RETICÊNCIAS #}
+        {% if page > 6 %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        {% endif %}
+
+        {# PÁGINAS PRÓXIMAS DA ATUAL #}
+        {% for p in range(page - 2, page + 3) %}
+            {% if 4 <= p <= total_pages - 3 %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link"
+                   href="/buscar?page={{ p }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+                   {{ p }}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {# RETICÊNCIAS #}
+        {% if page < total_pages - 5 %}
+            <li class="page-item disabled"><span class="page-link">...</span></li>
+        {% endif %}
+
+        {# ÚLTIMAS 3 #}
+        {% for p in range(total_pages - 2, total_pages + 1) %}
+            {% if p > 0 %}
+            <li class="page-item {% if p == page %}active{% endif %}">
+                <a class="page-link"
+                   href="/buscar?page={{ p }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+                   {{ p }}
+                </a>
+            </li>
+            {% endif %}
+        {% endfor %}
+
+        {# BOTÃO PRÓXIMO #}
+        {% if page < total_pages %}
+        <li class="page-item">
+            <a class="page-link"
+               href="/buscar?page={{ page + 1 }}&data_ini={{ data_ini }}&data_fim={{ data_fim }}">
+               Próxima
+            </a>
+        </li>
+        {% endif %}
+    </ul>
+</nav>
+
+
+<div class="table-responsive">
+    <table class="table table-bordered table-striped table-sm">
+        <thead class="table-dark">
+            <tr>
+                {% for col in dados[0].keys() %}
+                    <th>{{ col }}</th>
+                {% endfor %}
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for linha in dados_paginados %}
+            <tr>
+                {% for valor in linha.values() %}
+                <td>
+                    {% if valor is number %}
+                        {{ "%.3f"|format(valor)|replace(".", ",") }}
+                    {% else %}
+                        {{ valor }}
+                    {% endif %}
+                </td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+{% else %}
+<p class="text-danger fw-bold">Nenhum registro encontrado.</p>
+{% endif %}
+
+</body>
+</html>
