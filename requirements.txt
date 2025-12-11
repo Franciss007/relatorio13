@@ -4,3 +4,4 @@ fdb
 python-dotenv
 Flask-Login
 flask_sqlalchemy
+psycopg2-binary
