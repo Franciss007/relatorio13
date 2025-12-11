@@ -2,5 +2,6 @@ Flask
 pandas
 fdb
 python-dotenv
+Flask-Login
 
 
