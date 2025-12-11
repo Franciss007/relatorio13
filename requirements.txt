@@ -3,5 +3,4 @@ pandas
 fdb
 python-dotenv
 Flask-Login
-
-
+flask_sqlalchemy
