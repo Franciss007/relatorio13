@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Menu Principal</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='menu.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+<body>
+
+    <div class="header-container">
+        <img src="{{ url_for('static', filename='logofribal.png') }}" 
+             class="logo-fribal" alt="Logo Fribal">
+            <p class="welcome-msg">Bem-vindo, <strong>{{ current_user.nome.title() }}</strong></p>
+    </div>
+
+    <div style="text-align: center;">
+        <h1>Escolha um módulo</h1>
+        <a class="btn" href="/selecionar/cortes">Cortes</a>
+        <a class="btn" href="/selecionar/resultado">Pedidos</a>
+        <a class="btn" href="/selecionar/demanda">Demanda</a>
+        <br>
+        {% if current_user.nome in ['admin', 'lucas'] %}
+            <a class="btn btn-admin" href="{{ url_for('auth.registrar') }}">Criar Novo Usuário</a>
+        {% endif %}
+
+        <a class="btn btn-logout" href="{{ url_for('auth.logout') }}">Sair do Sistema</a>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Gerenciar Usuários</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registro.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+<body>
+
+    <div class="header-container">
+        <h2>Painel Admin</h2>
+        <img src="{{ url_for('static', filename='logofribal.png') }}" class="logo-fribal" alt="Logo Fribal">
+    </div>
+
+    <!-- Mensagens -->
+    <div class="mensagens-container">
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-success">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        {% if erro %}
+            <div class="alert-error">{{ erro }}</div>
+        {% endif %}
+    </div>
+
+    <div class="forms-row">
+        <!-- CRIAR USUÁRIO -->
+        <div class="form-container">
+            <h3>Cadastrar Novo Usuário</h3>
+            <form method="POST" action="{{ url_for('auth.registrar') }}">
+                <label class="form-label">Nome:</label>
+                <input type="text" name="nome" class="form-control" required>
+
+                <label class="form-label">Senha Inicial:</label>
+                <input type="password" name="senha" class="form-control" placeholder="Ex: 1234" required>
+
+                <label class="form-label">Permissões de Acesso:</label>
+                <div class="permissoes-box">
+                    <div>
+                        <input type="checkbox" name="permissoes" value="cortes" id="p_cortes">
+                        <label for="p_cortes">Módulo de Cortes</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="permissoes" value="pedidos" id="p_pedidos">
+                        <label for="p_pedidos">Módulo de Pedidos</label>
+                    </div>
+                    <div>
+                        <input type="checkbox" name="permissoes" value="demanda" id="p_demanda">
+                        <label for="p_demanda">Módulo de Demanda</label>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary">Criar Usuário</button>
+            </form>
+        </div>
+
+        <!-- RESETAR SENHA -->
+        <div class="form-container amarelo">
+            <h3>Resetar Senha</h3>
+            <form method="POST" action="{{ url_for('auth.resetar_senha') }}">
+                <label class="form-label">Nome do Usuário:</label>
+                <input type="text" name="nome_usuario" class="form-control" required>
+                <button type="submit" class="btn btn-amarelo">Resetar para '1234'</button>
+            </form>
+            <a href="{{ url_for('index') }}" class="btn btn-voltar">← Voltar ao Menu</a>
+        </div>
+ 
+    </div>
+
+
+</body>
+</html>

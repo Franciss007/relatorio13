@@ -1,0 +1,129 @@
+/* ======== RESET BÁSICO ======== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
+/* ======== BODY ======== */
+body {
+    background-color: #f4f4f4;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
+    padding: 20px;
+}
+
+/* ======== HEADER & LOGO ======== */
+.header-container {
+    margin-bottom: 30px;
+}
+.header-container p{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin:0 auto; 
+}
+
+.logo-fribal {
+    max-width: 250px;
+    height: auto;
+    display: block;
+}
+
+/* ======== TYPOGRAPHY ======== */
+h1 {
+    font-size: 2rem;
+    color: #2c3e50;
+    margin-bottom: 10px;
+}
+
+.welcome-msg {
+    font-size: 1.1rem;
+    color: #666;
+    margin-bottom: 40px;
+    background-color: #fff;
+    padding: 10px 20px;
+    border-radius: 50px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+    display: inline-block;
+}
+
+/* ======== BOTÕES (BASE) ======== */
+.btn {
+    display: inline-block;
+    width: 200px; /* Largura fixa para ficarem alinhados */
+    padding: 15px 20px;
+    margin: 10px;
+    background-color: #2c3e50; /* Azul Escuro Padrão */
+    color: white;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 1rem;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    border: none;
+    text-align: center;
+}
+
+.btn:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    opacity: 0.9;
+}
+
+/* ======== VARIAÇÕES DE BOTÕES ======== */
+
+/* Módulos Principais (Cortes, Pedidos, Demanda) */
+/* Usamos o estilo base, mas podemos dar um toque específico se quiser */
+a[href*="/selecionar/"] {
+    background-color: #e63946; /* Vermelho Fribal */
+}
+
+/* Botão Admin (Criar Usuário) */
+.btn-admin {
+    background-color: #17a2b8; /* Azul Ciano - Diferente dos módulos */
+    margin-top: 30px; /* Separar um pouco do bloco principal */
+    width: auto; /* Largura automática para caber o texto */
+    min-width: 200px;
+}
+
+.btn-admin:hover {
+    background-color: #138496;
+}
+
+/* Botão Logout (Sair) */
+.btn-logout {
+    background-color: #6c757d; /* Cinza para não chamar tanta atenção quanto os módulos */
+    display: block; /* Força quebra de linha se não estiver dentro de div separada */
+    margin: 20px auto 0 auto;
+    width: 150px; /* Menor que os outros */
+    font-size: 0.9rem;
+}
+
+.btn-logout:hover {
+    background-color: #5a6268;
+    background-color: #dc3545; /* Vira vermelho ao passar o mouse para indicar ação destrutiva */
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 600px) {
+    .btn {
+        width: 100%; /* Botões ocupam largura total no celular */
+        display: block;
+        margin: 10px 0;
+    }
+    
+    .btn-admin, .btn-logout {
+        width: 100%;
+    }
+
+    h1 {
+        font-size: 1.5rem;
+    }
+}

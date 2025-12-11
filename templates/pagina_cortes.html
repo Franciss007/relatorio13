@@ -3,7 +3,6 @@
 <head>
     <meta charset="UTF-8">
     <title>Relatório</title>
-
     <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
     <link rel="stylesheet" href="{{ url_for('static', filename='cortes.css') }}">
 </head>
@@ -12,22 +11,26 @@
 
 <div class="header-container">
     <h2>Gerar Relatório</h2>
-
-    <img src="{{ url_for('static', filename='logofribal.png') }}" 
-         class="logo-fribal" alt="Logo Fribal">
+    <img src="{{ url_for('static', filename='logofribal.png') }}" class="logo-fribal" alt="Logo Fribal">
 </div>
 
-<form method="POST" action="{{ url_for('cortes.buscar') }}">
-    <!-- Data Inicial -->
-    <label class="form-label">Data Inicial:</label>
-    <input type="date" name="data_ini" class="form-control" required>
+<!-- Adicionei verificação de erro caso o Python mande alguma mensagem -->
+{% if erro %}
+    <div style="color: red; text-align: center; margin-bottom: 15px;">{{ erro }}</div>
+{% endif %}
 
-    <!-- Data Final -->
+<form method="GET" action="{{ url_for('cortes.buscar') }}">
+    
+    <label class="form-label">Data Inicial:</label>
+    <input type="date" name="data_ini" class="form-control" value="{{ request.args.get('data_ini', '') }}" required>
+
     <label class="form-label">Data Final:</label>
-    <input type="date" name="data_fim" class="form-control" required>
+    <input type="date" name="data_fim" class="form-control" value="{{ request.args.get('data_fim', '') }}" required>
 
     <button class="btn btn-primary" type="submit">Buscar</button>
-    <a href="{{ url_for('login') }}" class="btn btn-voltar">← Home</a>
+    
+    <!-- CORRIGIDO: O botão voltar aponta para 'index' (Menu Principal) -->
+    <a href="{{ url_for('index') }}" class="btn btn-voltar">← Menu</a>
 </form>
 
 </body>

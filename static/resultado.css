@@ -1,0 +1,176 @@
+/* ======== VARIÁVEIS & RESET ======== */
+:root {
+    --primary-color: #e63946;
+    --secondary-color: #e63946;
+    --accent-green: #2a9d8f;
+    --bg-color: #f4f6f8;
+    --card-bg: #ffffff;
+    --text-color: #333;
+    --border-color: #e0e0e0;
+    --shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: 'Inter', 'Segoe UI', Arial, sans-serif;
+}
+
+body {
+    background-color: var(--bg-color);
+    color: var(--text-color);
+    padding: 20px; /* Reduzi um pouco o padding da borda */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+h2 {
+    color: var(--secondary-color);
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    text-align: center;
+}
+
+/* ======== BARRA DE AÇÕES (BOTÕES) ======== */
+.actions-bar {
+    background-color: var(--card-bg);
+    padding: 10px 20px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    display: flex;
+    gap: 15px;
+    margin-bottom: 20px;
+    
+    /* MUDANÇA: Ocupa a largura total */
+    width: 98%; 
+    max-width: 100%; 
+    
+    align-items: center;
+    justify-content: flex-start; /* Alinha à esquerda */
+}
+
+.form-inline {
+    display: inline-flex;
+    align-items: center;
+}
+
+/* ======== BOTÕES ======== */
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 8px 16px; /* Botões um pouco mais compactos */
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.2s ease-in-out;
+    cursor: pointer;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    text-decoration: none;
+    border: none;
+    white-space: nowrap;
+}
+
+.btn-home {
+    background-color: #fff;
+    color: var(--secondary-color);
+    border: 1px solid var(--border-color);
+}
+
+.btn-home:hover {
+    background-color: #f0f0f0;
+    transform: translateY(-2px);
+}
+
+.btn-export {
+    background-color: var(--accent-green);
+    color: white;
+}
+
+.btn-export:hover {
+    background-color: #21867a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 8px rgba(42, 157, 143, 0.3);
+}
+
+/* ======== TABELA FULL WIDTH ======== */
+.table-wrapper {
+    /* MUDANÇA: Largura total da tela */
+    width: 98%;
+    max-width: 100%;
+    overflow-x: auto; /* Mantém a rolagem caso a tela seja muito pequena */
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    background-color: var(--card-bg);
+    border: 1px solid var(--border-color);
+}
+
+.results-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.85rem; /* Fonte menor para caber mais dados (aprox 13px) */
+}
+
+/* Cabeçalho */
+.results-table thead {
+    background-color: var(--secondary-color);
+    color: white;
+}
+
+.results-table th {
+    padding: 10px 8px; /* Padding reduzido lateralmente */
+    text-align: left;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem; /* Cabeçalho um pouco menor */
+    white-space: nowrap; /* Títulos não quebram linha */
+}
+
+/* Células */
+.results-table td {
+    padding: 8px 8px; /* Células mais compactas */
+    border-bottom: 1px solid var(--border-color);
+    color: #444;
+    vertical-align: middle;
+}
+
+/* Tenta manter dados em uma linha, exceto descrições longas */
+.results-table td {
+    white-space: nowrap; 
+    max-width: 250px; /* Limite máximo para colunas de texto */
+    overflow: hidden;
+    text-overflow: ellipsis; /* Coloca "..." se for muito grande */
+}
+
+/* Permite quebra de linha APENAS nas colunas de Nome/Descrição se necessário 
+   Você pode ajustar o nth-child dependendo da posição da coluna de descrição */
+.results-table td:nth-child(2), 
+.results-table td:nth-child(5) { 
+    white-space: normal;
+    min-width: 150px;
+}
+
+.results-table tbody tr:nth-child(even) {
+    background-color: #f8f9fa;
+}
+
+.results-table tbody tr:hover {
+    background-color: #eef2f7;
+}
+
+/* ======== MENSAGEM VAZIA ======== */
+.empty-msg {
+    background: white;
+    padding: 30px;
+    border-radius: 8px;
+    box-shadow: var(--shadow);
+    color: #666;
+    font-style: italic;
+    width: 98%;
+    text-align: center;
+}

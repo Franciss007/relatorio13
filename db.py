@@ -1,7 +1,7 @@
 import fdb
 import os
 from dotenv import load_dotenv
-
+from flask_sqlalchemy import SQLAlchemy
 load_dotenv()
 
 DB_HOST = os.getenv("DB_HOST")
@@ -19,3 +19,6 @@ def get_connection():
         port=int(DB_PORT),
         charset="WIN1252"
     )
+
+
+db = SQLAlchemy()

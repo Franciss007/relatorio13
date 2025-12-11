@@ -1,4 +1,4 @@
-/* ======== RESET BÁSICO ======== */
+/* ======== RESET BÁSICO (Do CSS Base) ======== */
 * {
     margin: 0;
     padding: 0;
@@ -6,77 +6,107 @@
     font-family: Arial, Helvetica, sans-serif;
 }
 
-/* ======== BODY ======== */
+/* ======== BODY (Ajustado para Centralizar o Login) ======== */
 body {
     background: #f5f5f5;
     color: #333;
+    /* Faz a caixa ficar no centro da tela */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 100vh;
     padding: 20px;
+}
+
+/* ======== CAIXA DE LOGIN (.login-box) ======== */
+.login-box {
+    background-color: #ffffff;
+    width: 100%;
+    max-width: 400px; /* Largura máxima para não esticar demais */
+    padding: 40px 30px;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Sombra suave */
     text-align: center;
 }
 
-/* ======== HEADER CONTAINER ======== */
-.header-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 15px;
-    margin-bottom: 30px;
+/* ======== ELEMENTOS INTERNOS ======== */
+
+/* Logo dentro do login */
+.login-box img {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 20px;
 }
 
-.header-container h2 {
-    font-size: 24px;
+/* Título H2 */
+.login-box h2 {
+    font-size: 22px;
     font-weight: 700;
     color: #222;
+    margin-bottom: 25px;
 }
 
-/* ======== LOGO ======== */
-.logo-fribal {
-    width: 300px;
-    height: auto;
+/* Inputs do formulário */
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 12px 15px;
+    margin: 8px 0;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.3s;
+    background-color: #fafafa;
 }
 
-/* ======== TÍTULOS ======== */
-h1 {
-    font-size: 28px;
-    font-weight: bold;
-    margin-bottom: 30px;
+.login-box input:focus {
+    border-color: #e63946; /* Cor da marca no foco */
+    background-color: #fff;
 }
 
-/* ======== BOTÕES ======== */
-.btn {
-    display: inline-block;
-    padding: 12px 22px;
-    margin: 10px;
+/* Botão (Baseado no .btn do seu CSS Base) */
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 20px;
     font-size: 18px;
     font-weight: 600;
-    text-decoration: none;
-    border-radius: 8px;
     border: none;
-    transition: 0.25s ease-in-out;
+    border-radius: 8px;
     cursor: pointer;
-
-    background-color: #e63946; /* vermelho suave */
+    background-color: #e63946; /* Vermelho Suave */
     color: white;
+    transition: 0.25s ease-in-out;
 }
 
-.btn:hover {
-    background-color: #b71c1c; /* vermelho mais escuro */
-    transform: scale(1.05);
+.login-box button:hover {
+    background-color: #b71c1c; /* Vermelho Escuro */
+    transform: scale(1.02);
 }
 
-/* Responsividade */
-@media (max-width: 600px) {
-    h1 {
-        font-size: 22px;
+/* ======== MENSAGENS DE ERRO ======== */
+.error {
+    background-color: #ffe6e6;
+    color: #d32f2f;
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 15px;
+    font-size: 14px;
+    border: 1px solid #ffcccc;
+}
+
+/* ======== RESPONSIVIDADE ======== */
+@media (max-width: 480px) {
+    .login-box {
+        padding: 30px 20px;
     }
 
-    .header-container h2 {
+    .login-box h2 {
         font-size: 20px;
     }
 
-    .btn {
-        width: 80%;
+    .login-box button {
         font-size: 16px;
-        padding: 14px;
     }
 }

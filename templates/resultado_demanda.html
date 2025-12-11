@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Resultados Demanda</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+<body class="p-4">
+
+    <div class="header-container">
+        <h2>Resultados da Demanda</h2>
+        <img src="{{ url_for('static', filename='logofribal.png') }}" class="logo-fribal" alt="Logo Fribal">
+    </div>
+
+    {% if dados_paginados and dados_paginados|length > 0 %}
+
+    <div class="header-container">
+        <h4>Página {{ page }} de {{ (total // per_page) + (1 if total % per_page else 0) }} (Total: {{ total }} registros)</h4>
+    </div>
+
+    <form action="{{ url_for('consultas.exportar_csv') }}" method="POST">
+        <input type="hidden" name="data_ini" value="{{ data_ini }}">
+        <input type="hidden" name="data_fim" value="{{ data_fim }}">
+        {% for prod in produtos %}
+            <input type="hidden" name="produtos[]" value="{{ prod }}">
+        {% endfor %}
+        <button class="btn btn-success mt-3" type="submit">Exportar CSV (todos)</button>
+    </form>
+    
+    <a href="{{ url_for('consultas.consulta') }}" class="btn btn-voltar">← Nova Pesquisa</a>
+
+    <nav>
+        <ul class="pagination">
+            {% if page > 1 %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="{{ url_for('consultas.buscar', page=page-1, data_ini=data_ini, data_fim=data_fim, **{'produtos[]': produtos}) }}">
+                   Anterior
+                </a>
+            </li>
+            {% endif %}
+
+            {% set total_pages = (total // per_page) + (1 if total % per_page else 0) %}
+
+            {% for p in range(1, total_pages + 1) %}
+                {% if p == 1 or p == total_pages or (p >= page - 2 and p <= page + 2) %}
+                    <li class="page-item {% if p == page %}active{% endif %}">
+                        <a class="page-link"
+                           href="{{ url_for('consultas.buscar', page=p, data_ini=data_ini, data_fim=data_fim, **{'produtos[]': produtos}) }}">
+                           {{ p }}
+                        </a>
+                    </li>
+                {% elif p == page - 3 or p == page + 3 %}
+                    <li class="page-item disabled"><span class="page-link">...</span></li>
+                {% endif %}
+            {% endfor %}
+            {% if page < total_pages %}
+            <li class="page-item">
+                <a class="page-link"
+                   href="{{ url_for('consultas.buscar', page=page+1, data_ini=data_ini, data_fim=data_fim, **{'produtos[]': produtos}) }}">
+                   Próxima
+                </a>
+            </li>
+            {% endif %}
+
+        </ul>
+    </nav>
+
+    <div class="table-responsive">
+        <table class="table table-bordered table-striped table-sm">
+            <thead class="table-dark">
+                <tr>
+                    {% for key in titulos.keys() %}
+                        {% if dados_paginados[0] and key in dados_paginados[0] %}
+                            <th>{{ titulos[key] }}</th>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for linha in dados_paginados %}
+                <tr>
+                    {% for key in titulos.keys() %}
+                        {% if key in linha %}
+                        <td>
+                            {% set valor = linha[key] %}
+                            {% if valor is number %}
+                                {{ "%.3f"|format(valor)|replace(".", ",") }}
+                            {% else %}
+                                {{ valor }}
+                            {% endif %}
+                        </td>
+                        {% endif %}
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {% else %}
+        <a href="{{ url_for('consultas.consulta') }}" class="btn btn-voltar">← Nova Pesquisa</a>
+        <p class="text-danger fw-bold mt-4">Nenhum registro encontrado para os filtros selecionados.</p>
+    {% endif %}
+
+</body>
+</html>

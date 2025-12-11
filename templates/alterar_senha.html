@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Alterar Senha</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='registro.css') }}"> <!-- Reaproveita o CSS -->
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+<body>
+
+    <div class="header-container">
+        <h2>Segurança</h2>
+        <img src="{{ url_for('static', filename='logofribal.png') }}" class="logo-fribal" alt="Logo Fribal">
+    </div>
+
+    <div class="form-container">
+        <h3 style="text-align: center; margin-bottom: 15px;">Defina sua nova senha</h3>
+        
+        <p style="text-align: center; color: #666; font-size: 0.9rem; margin-bottom: 20px;">
+            Este é seu primeiro acesso ou sua senha foi resetada. Por favor, defina uma nova senha pessoal.
+        </p>
+
+        {% if erro %}
+            <div class="alert-error" style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                {{ erro }}
+            </div>
+        {% endif %}
+
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert-success" style="background: #fff3cd; color: #856404; padding: 10px; border-radius: 5px; margin-bottom: 20px; text-align: center;">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+
+        <form method="POST">
+            <label class="form-label">Nova Senha:</label>
+            <input type="password" name="nova_senha" class="form-control" placeholder="Digite a nova senha" required>
+            
+            <label class="form-label">Confirmar Nova Senha:</label>
+            <input type="password" name="confirmar_senha" class="form-control" placeholder="Digite novamente" required>
+            
+            <button type="submit" class="btn btn-primary">Salvar e Acessar</button>
+        </form>
+    </div>
+
+</body>
+</html>

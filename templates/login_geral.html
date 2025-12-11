@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Sistema Integrado</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='login.css') }}">
+    <link rel="icon" type="image/png" href="{{ url_for('static', filename='logofribal.png') }}">
+</head>
+<body>
+    <div class="login-box">
+        <img src="{{ url_for('static', filename='logofribal.png') }}" alt="Logo" width="150" style="margin-bottom: 20px;">
+        <h2>Acesso ao Sistema</h2>
+        
+        <!-- Formulário aponta para o auth.login -->
+        <form method="POST" action="{{ url_for('auth.login') }}">
+            <input type="text" name="nome" placeholder="Usuário" required>
+            <input type="password" name="senha" placeholder="Senha" required>
+            <button type="submit">ENTRAR</button>
+        </form>
+
+        {% if erro %}
+            <p class="error">{{ erro }}</p>
+        {% endif %}
+        
+        {% with messages = get_flashed_messages() %}
+            {% if messages %}
+                {% for message in messages %}
+                    <p class="error">{{ message }}</p>
+                {% endfor %}
+            {% endif %}
+        {% endwith %}
+    </div>
+</body>
+</html>

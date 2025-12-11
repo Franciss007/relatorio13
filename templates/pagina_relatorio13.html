@@ -13,6 +13,10 @@
     class="logo-fribal" alt="Logo Fribal">
 </div>
 
+<!-- Bloco para exibir erros de validação vindos do Python -->
+{% if erro %}
+    <div style="color: red; text-align: center; margin-bottom: 15px; font-weight: bold;">{{ erro }}</div>
+{% endif %}
 
 <form method="POST" action="{{ url_for('pedidos.buscar') }}">
     <label class="form-label">Operação:</label>
@@ -30,7 +34,9 @@
     <input type="date" name="data_fim" class="form-control" required>
 
     <button class="btn btn-primary">Buscar</button>
-    <a href="{{ url_for('login') }}" class="btn btn-voltar">← Home</a>
+    
+    <!-- CORREÇÃO: Aponta para o Menu Principal ('index') -->
+    <a href="{{ url_for('index') }}" class="btn btn-voltar">← Menu</a>
 </form>
 
 </body>

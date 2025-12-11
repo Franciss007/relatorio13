@@ -1,9 +1,9 @@
-from flask import Blueprint, render_template, request, make_response
+from flask import Blueprint, render_template, request, make_response, url_for, session, redirect
+from flask_login import login_required, current_user 
 from db import get_connection
 import io
 
 bp = Blueprint("cortes", __name__, url_prefix="/cortes")
-
 
 SQL = """
 SELECT 
@@ -51,15 +51,23 @@ WHERE
 ORDER BY 1, SAI_DATA;
 """
 
-
 @bp.route("/")
+@login_required 
 def index():
-    return render_template("pagina_cortes.html")
+    # --- SEGURANÇA: Verifica se tem permissão 'cortes' ---
+    if not current_user.tem_permissao('cortes'):
+        return render_template("pagina_erro.html", mensagem="Seu usuário não tem permissão para acessar o módulo de CORTES.")
 
+    return render_template("pagina_cortes.html", usuario=current_user)
 
 @bp.route("/buscar", methods=["GET", "POST"])
+@login_required 
 def buscar():
-    page = int(request.args.get("page", 1))
+    # --- SEGURANÇA ---
+    if not current_user.tem_permissao('cortes'):
+        return render_template("pagina_erro.html", mensagem="Acesso Negado.")
+
+    page = request.args.get("page", 1, type=int)
     per_page = 20
 
     if request.method == "POST":
@@ -68,29 +76,23 @@ def buscar():
     else:
         data_ini = request.args.get("data_ini")
         data_fim = request.args.get("data_fim")
+    
+    if not data_ini or not data_fim:
+        return render_template("pagina_cortes.html", usuario=current_user, erro="Selecione as datas.")
 
     conn = get_connection()
     cur = conn.cursor()
-
-    print("\n--- DEBUG CONSULTA /resultado/buscar ---")
-    print("SQL:")
-    print(SQL)
-    print("\nParâmetros:", data_ini, data_fim)
-    print("---------------------------")
-
     cur.execute(SQL, (data_ini, data_fim))
     rows = cur.fetchall()
     cols = [d[0] for d in cur.description]
-
     conn.close()
-
+    
     dados = [dict(zip(cols, r)) for r in rows]
-
     total = len(dados)
     start = (page - 1) * per_page
     end = start + per_page
     dados_paginados = dados[start:end]
-
+    
     return render_template(
         "resultado_cortes.html",
         dados=dados,
@@ -99,39 +101,45 @@ def buscar():
         per_page=per_page,
         total=total,
         data_ini=data_ini,
-        data_fim=data_fim
+        data_fim=data_fim,
+        usuario=current_user 
     )
 
-
 @bp.route("/exportar", methods=["POST"])
+@login_required 
 def exportar():
+    # --- SEGURANÇA ---
+    if not current_user.tem_permissao('cortes'):
+        return "Acesso Negado", 403
+
     data_ini = request.form.get("data_ini")
     data_fim = request.form.get("data_fim")
-
+    
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(SQL, (data_ini, data_fim))  # CORRETO: apenas 2 parâmetros
+    cur.execute(SQL, (data_ini, data_fim))
     cols = [d[0] for d in cur.description]
     rows = cur.fetchall()
     conn.close()
-
+    
     output = io.StringIO()
     output.write(";".join(cols) + "\n")
-
     for r in rows:
         linha = []
         for v in r:
             if isinstance(v, float):
                 v = f"{v:,.3f}".replace(",", "X").replace(".", ",").replace("X", ".")
             linha.append(str(v))
-
         output.write(";".join(linha) + "\n")
-
+        
     csv_data = output.getvalue()
-
     response = make_response(csv_data)
     response.headers["Content-Disposition"] = "attachment; filename=cortes.csv"
     response.headers["Content-Type"] = "text/csv; charset=utf-8"
-
+    
     return response
 
+# Rota de segurança para logout
+@bp.route('/logout')
+def logout():
+    return redirect(url_for('auth.logout'))

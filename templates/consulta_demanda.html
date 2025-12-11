@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Consulta de Produtos</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='consulta.css') }}">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <div class="main-card">
+        
+        <div class="header-toolbar">
+            <div class="header-left">
+                <img src="{{ url_for('static', filename='logofribal.png') }}" class="logo-toolbar" alt="Logo">
+            </div>
+            <div class="header-center">
+                <h2>Consulta de Produtos</h2>
+            </div>
+            <div class="header-right">
+                <a href="{{ url_for('index') }}" class="btn btn-voltar">← Voltar</a>
+            </div>
+        </div>
+
+        <form method="POST" action="{{ url_for('consultas.buscar') }}" class="form-grid">
+            
+            <div class="col-inputs">
+                <div class="input-group">
+                    <label for="data_ini">Data Inicial</label>
+                    <input type="date" id="data_ini" name="data_ini" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="data_fim">Data Final</label>
+                    <input type="date" id="data_fim" name="data_fim" required>
+                </div>
+
+                <div class="input-group">
+                    <label for="dia">Dia da Semana</label>
+                    <select id="dia" name="dia" required>
+                        <option value="" disabled selected>Selecione o dia...</option>
+                        <option value="segunda">Segunda-feira</option>
+                        <option value="terca">Terça-feira</option>
+                        <option value="quarta">Quarta-feira</option>
+                        <option value="quinta">Quinta-feira</option>
+                        <option value="sexta">Sexta-feira</option>
+                        <option value="sabado">Sábado</option>
+                        <option value="domingo">Domingo</option>
+                    </select>
+                </div>
+                <div class="input-group">
+                    <label for="lista">Tipo de Lista</label>
+                    <select id="lista" name="lista" required>
+                        <option value="" disabled selected>Selecione o tipo...</option>
+                        <option value="lanchonete">Lanchonete</option>
+                        <option value="padaria">Padaria</option>
+                    </select>
+                </div>
+
+                <button type="submit" class="btn-submit">Realizar Busca</button>
+            </div>
+
+            <div class="col-results">
+                <div class="results-header">
+                    <h3>Produtos Selecionados</h3>
+                </div>
+                
+                <div id="produtos-container">
+                    <ul id="lista-produtos">
+                        <li class="empty-state">Nenhum produto listado.</li> 
+                    </ul>
+                </div>
+
+                <button type="button" id="btn-add" class="btn-secondary">
+                    + Adicionar Manualmente
+                </button>
+            </div>
+
+        </form>
+    </div>
+
+    <div id="modal-overlay" class="modal-overlay hidden">
+        <div class="modal-card">
+            <h3>Adicionar Produto</h3>
+            <p>Digite o código com 5 dígitos:</p>
+            
+            <input type="text" id="modal-input-codigo" placeholder="Ex: 00100" autocomplete="off">
+            <small id="modal-error-msg" class="error-msg"></small>
+            
+            <div class="modal-actions">
+                <button id="btn-modal-cancel" class="btn-cancel">Cancelar</button>
+                <button id="btn-modal-confirm" class="btn-confirm">Pesquisar</button>
+            </div>
+        </div>
+    </div>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    console.log(">>> O Sistema iniciou o carregamento...");
+
+    /* ============================================================
+       1) SELEÇÃO DE ELEMENTOS
+    ============================================================ */
+    const diaSelect = document.getElementById("dia");
+    const listaSelect = document.getElementById("lista");
+    const listaProdutos = document.getElementById("lista-produtos");
+    const btnAdd = document.getElementById("btn-add");
+    // const countBadge = document.getElementById("count-badge"); // Opcional
+
+    // Elementos do Modal
+    const modalOverlay = document.getElementById("modal-overlay");
+    const modalInput = document.getElementById("modal-input-codigo");
+    const modalErrorMsg = document.getElementById("modal-error-msg");
+    const btnModalCancel = document.getElementById("btn-modal-cancel");
+    const btnModalConfirm = document.getElementById("btn-modal-confirm");
+
+    // Debug
+    if (!btnAdd) console.error("ERRO: Botão 'btn-add' não encontrado.");
+    if (!modalOverlay) console.error("ERRO: Modal Overlay não encontrado (Verifique o HTML).");
+
+    /* ============================================================
+       2) CARREGAMENTO DO JSON
+    ============================================================ */
+    let listas = {};
+    
+    fetch("{{ url_for('static', filename='listas.json') }}")
+        .then(res => {
+            if (!res.ok) throw new Error("Arquivo JSON não encontrado (404)");
+            return res.json();
+        })
+        .then(data => {
+            console.log(">>> JSON Carregado com sucesso!");
+            listas = data;
+        })
+        .catch(err => {
+            console.error(">>> ERRO JSON:", err);
+            alert("Erro ao carregar lista de produtos.");
+        });
+
+    /* ============================================================
+       3) FUNÇÕES LÓGICAS
+    ============================================================ */
+    function toggleLoading(isLoading) {
+        if (!btnModalConfirm) return;
+        if (isLoading) {
+            btnModalConfirm.textContent = "Buscando...";
+            btnModalConfirm.disabled = true;
+            if(btnModalCancel) btnModalCancel.disabled = true;
+            if(modalInput) modalInput.disabled = true;
+            if(modalErrorMsg) modalErrorMsg.style.display = "none";      
+        } else {
+            btnModalConfirm.textContent = "Pesquisar";
+            btnModalConfirm.disabled = false;
+            if(btnModalCancel) btnModalCancel.disabled = false;
+            if(modalInput) {
+                modalInput.disabled = false;
+                modalInput.focus();
+            }
+        }
+    }
+
+    function mostrarErro(mensagem) {
+        if (modalErrorMsg) {
+            modalErrorMsg.innerText = mensagem;
+            modalErrorMsg.style.display = "block";
+        }
+        if (modalInput) {
+            modalInput.classList.add("input-error");
+            modalInput.focus();
+        }
+    }
+
+    function limparErro() {
+        if (modalErrorMsg) modalErrorMsg.style.display = "none";
+        if (modalInput) modalInput.classList.remove("input-error");
+    }
+
+    function carregarLista() {
+        if (!listaProdutos || !diaSelect || !listaSelect) return;
+        
+        listaProdutos.innerHTML = "";
+        // atualizarContador(); // Se tiver contador
+
+        const dia = diaSelect.value;
+        const tipo = listaSelect.value;
+
+        if (dia && tipo && listas[dia] && listas[dia][tipo]) {
+            const produtos = listas[dia][tipo];
+            console.log(`>>> Carregando ${produtos.length} produtos.`);
+            produtos.forEach(p => addProduto(p.codigo, p.nome));
+        }
+    }
+
+    function addProduto(codigo, nome) {
+        if (!listaProdutos) return;
+
+        const emptyState = listaProdutos.querySelector(".empty-state");
+        if (emptyState) emptyState.remove();
+
+        const li = document.createElement("li");
+        
+        const span = document.createElement("span");
+        span.className = "prod-info";
+        span.textContent = `${codigo} - ${nome}`;
+
+        // Input Hidden para enviar ao Python
+        const input = document.createElement("input");
+        input.type = "hidden";
+        input.name = "produtos[]";
+        input.value = `${codigo}-${nome}`;
+
+        const btnRemove = document.createElement("button");
+        btnRemove.innerHTML = "&times;";
+        btnRemove.className = "btn-remove";
+        btnRemove.type = "button";
+        
+        btnRemove.addEventListener("click", function() {
+            li.remove();
+            const itens = listaProdutos.querySelectorAll("li");
+            if (itens.length === 0) {
+                listaProdutos.innerHTML = '<li class="empty-state">Nenhum produto listado.</li>';
+            }
+        });
+
+        li.appendChild(span);
+        li.appendChild(input);
+        li.appendChild(btnRemove);
+        listaProdutos.appendChild(li);
+    }
+
+    function processarBuscaManual() {
+        if (!modalInput) return;
+        const codigo = modalInput.value.trim();
+
+        if (!codigo) {
+            mostrarErro("Digite um código válido.");
+            return;
+        }
+
+        toggleLoading(true);
+
+        fetch("{{ url_for('consultas.buscar_produto_manual') }}", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({ codigo: codigo })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.sucesso) {
+                fecharModal();
+                addProduto(data.codigo, data.nome);
+            } else {
+                mostrarErro(data.mensagem || "Produto não encontrado! Certifique de inserir os 5 digitos, contando com os zeros a esquerda");
+            }
+        })
+        .catch(err => {
+            console.error(err);
+            mostrarErro("Erro de conexão.");
+        })
+        .finally(() => toggleLoading(false));
+    }
+
+    function abrirModal() {
+        limparErro();
+        if (modalOverlay) modalOverlay.classList.remove("hidden");
+        if (modalInput) {
+            modalInput.value = "";
+            setTimeout(() => modalInput.focus(), 100);
+        }
+    }
+
+    function fecharModal() {
+        if (modalOverlay) modalOverlay.classList.add("hidden");
+    }
+
+    /* ============================================================
+       4) EVENTOS
+    ============================================================ */
+    if (diaSelect) diaSelect.addEventListener("change", carregarLista);
+    if (listaSelect) listaSelect.addEventListener("change", carregarLista);
+
+    if (btnAdd) {
+        btnAdd.addEventListener("click", function(e) {
+            e.preventDefault(); // Impede recarregar a página
+            console.log(">>> Botão Adicionar Clicado!");
+            abrirModal();
+        });
+    }
+
+    if (btnModalCancel) btnModalCancel.addEventListener("click", (e) => {
+        e.preventDefault();
+        fecharModal();
+    });
+
+    if (btnModalConfirm) btnModalConfirm.addEventListener("click", (e) => {
+        e.preventDefault();
+        processarBuscaManual();
+    });
+
+    if (modalOverlay) {
+        modalOverlay.addEventListener("click", (e) => {
+            if (e.target === modalOverlay) fecharModal();
+        });
+    }
+
+    if (modalInput) {
+        modalInput.addEventListener("input", limparErro);
+        modalInput.addEventListener("keypress", (e) => {
+            if (e.key === "Enter") {
+                e.preventDefault();
+                processarBuscaManual();
+            }
+        });
+    }
+
+    // Tecla ESC fecha modal
+    document.addEventListener("keydown", (e) => {
+        if (e.key === "Escape" && modalOverlay && !modalOverlay.classList.contains("hidden")) {
+            fecharModal();
+        }
+    });
+
+});
+</script>
+
+</body>
+</html>
