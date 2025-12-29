@@ -46,7 +46,7 @@ WHERE SAI_CANC = 'N'
   AND SAI_DATA BETWEEN ? AND ?
 ORDER BY SAI_CODI
 """
-
+    
 @bp.route("/")
 @login_required 
 def index():

@@ -18,6 +18,11 @@ app.secret_key = 'Fribal_sistema_2025'
 app.config['SQLALCHEMY_DATABASE_URI'] = os.getenv("POSTGRES_URI")
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
+app.config['SQLALCHEMY_ENGINE_OPTIONS'] = {
+    "pool_pre_ping": True,
+    "pool_recycle": 1800,
+}
+
 db.init_app(app)
 with app.app_context():
     db.create_all()
