@@ -19,6 +19,13 @@
 {% endif %}
 
 <form method="POST" action="{{ url_for('pedidos.buscar') }}">
+    <label class="form-label">Loja:</label>
+        <select name="loja" class="form-select">
+            <option value="">Todas as Lojas</option>
+            {% for lj in lojas %}
+                <option value="{{ lj[0] }}">{{ lj[0] }} - {{ lj[1] }}</option>
+            {% endfor %}
+        </select>
     <label class="form-label">Operação:</label>
     <select name="operacao" class="form-select" required>
         <option value="">Selecione...</option>

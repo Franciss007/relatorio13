@@ -41,7 +41,7 @@ JOIN TB_USUA ON SAI_CDUS = USU_CODI
 JOIN TB_DSAI ON DSD_LOJA = SAI_LOJA AND DSD_CODI = SAI_CODI
 JOIN TB_MATE ON MAT_CODI = DSD_CDMT
 WHERE SAI_CANC = 'N'
-  AND SAI_LOJA = '999'
+  AND (SAI_LOJA = ? OR ? = '')
   AND SAI_OPER = ?
   AND SAI_DATA BETWEEN ? AND ?
 ORDER BY SAI_CODI
@@ -58,9 +58,23 @@ def index():
     cur = conn.cursor()
     cur.execute("SELECT OP_CODI, OP_DESC FROM TB_OPER WHERE OP_TIPO ='S' ORDER BY OP_DESC")
     operacoes = cur.fetchall()
+    cur.execute("""SELECT EMP_CODI, EMP_NFAN FROM TB_EMP te 
+WHERE 1=1
+AND EMP_CODI IN ('001','002',
+'004','005','006','007','008','009','010','011',
+'012','013','014','015','102','016','017','018',
+'019','020','021','022','023','024','025','026',
+'027','032','060','057','103','029','031','037',
+'038','039','041','042','045','999','199','043',
+'053','047','048','050','052','054','056','055',
+'104','105','058','059','061','063','107','064',
+'065','073','066','067','068','069','995','070',
+'071','072','074','990','075','076','077')
+ORDER BY EMP_CODi""")
+    lojas = cur.fetchall()
     conn.close()
     
-    return render_template("pagina_relatorio13.html", operacoes=operacoes, usuario=current_user)
+    return render_template("pagina_relatorio13.html", lojas=lojas,operacoes=operacoes, usuario=current_user)
 
 @bp.route("/buscar", methods=["POST", "GET"])
 @login_required 
@@ -70,10 +84,12 @@ def buscar():
         return render_template("pagina_erro.html", mensagem="Acesso Negado.")
 
     if request.method == "POST":
+        loja = request.form.get("loja", "")
         operacao = request.form.get("operacao")
         data_ini = request.form.get("data_ini")
         data_fim = request.form.get("data_fim")
     else:
+        loja = request.args.get("loja")
         operacao = request.args.get("operacao")
         data_ini = request.args.get("data_ini")
         data_fim = request.args.get("data_fim")
@@ -91,7 +107,7 @@ def buscar():
     
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(SQL, (operacao, data_ini, data_fim))
+    cur.execute(SQL, (loja, loja, operacao, data_ini, data_fim))
     cols = [d[0] for d in cur.description]
     rows = cur.fetchall()
     conn.close()
