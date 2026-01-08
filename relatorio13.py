@@ -145,13 +145,14 @@ def exportar():
     if not current_user.tem_permissao('pedidos'):
         return "Acesso Negado", 403
 
+    loja = request.form.get("loja", "")
     operacao = request.form.get("operacao")
     data_ini = request.form.get("data_ini")
     data_fim = request.form.get("data_fim")
     
     conn = get_connection()
     cur = conn.cursor()
-    cur.execute(SQL, (operacao, data_ini, data_fim))
+    cur.execute(SQL, (loja, loja,operacao, data_ini, data_fim))
     cols = [d[0] for d in cur.description]
     rows = cur.fetchall()
     conn.close()

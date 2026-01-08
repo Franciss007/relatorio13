@@ -15,11 +15,13 @@
 
     {% if dados_paginados and dados_paginados|length > 0 %}
 
-    <form action="{{ url_for('pedidos.exportar') }}" method="POST">
+   <form action="{{ url_for('pedidos.exportar') }}" method="POST">
+        <input type="hidden" name="loja" value="{{ loja }}">
         <input type="hidden" name="operacao" value="{{ operacao }}">
         <input type="hidden" name="data_ini" value="{{ data_ini }}">
         <input type="hidden" name="data_fim" value="{{ data_fim }}">
-        <button class="btn btn-success mt-3" type="submit">Exportar CSV (todos)</button>
+        
+        <button type="submit" class="btn btn-success">Exportar CSV</button>
     </form>
     
     <a href="{{ url_for('pedidos.index') }}" class="btn btn-voltar">← Voltar</a>
